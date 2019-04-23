@@ -28,9 +28,14 @@ class JsonToHtml:
             self.json_data = json.load(f)
 
     def json_to_html(self):
-        for data in self.json_data:
-            for key in data:
-                self.html_data += '<' + key + '>' + data[key] + '</' + key + '>'
+        if type(self.json_data) is list:
+            self.html_data += '<ul>'
+            for data in self.json_data:
+                self.html_data += '<li>'
+                for key in data:
+                    self.html_data += '<' + key + '>' + data[key] + '</' + key + '>'
+                self.html_data += '</li>'
+            self.html_data += '</ul>'
 
     def save_html(self, file_name):
         with open(file_name, "w") as f:
