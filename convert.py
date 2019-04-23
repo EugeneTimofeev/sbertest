@@ -27,13 +27,32 @@ class JsonToHtml:
         with open(file_name, "r") as f:
             self.json_data = json.load(f)
 
+    def makelist(self, json_content):  # вызовем функцию если найден лист
+        html = ''
+        html += '<ul>'
+        for data in json_content:
+            html += '<li>'
+            for key in data:
+                html += '<' + key + '>'
+                if type(data[key]) is list:
+                    html += self.makelist(data[key]) + '</' + key + '>'
+                else:
+                    html += data[key] + '</' + key + '>'
+            html += '</li>'
+        html += '</ul>'
+        return html
+
     def json_to_html(self):
         if type(self.json_data) is list:
             self.html_data += '<ul>'
             for data in self.json_data:
                 self.html_data += '<li>'
                 for key in data:
-                    self.html_data += '<' + key + '>' + data[key] + '</' + key + '>'
+                    self.html_data += '<' + key + '>'
+                    if type(data[key]) is list:
+                        self.html_data += self.makelist(data[key]) + '</' + key + '>'
+                    else:
+                        self.html_data += data[key] + '</' + key + '>'
                 self.html_data += '</li>'
             self.html_data += '</ul>'
 
